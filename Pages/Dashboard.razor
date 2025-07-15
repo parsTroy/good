@@ -124,101 +124,118 @@
     }
 }
 
-<div class="min-h-screen w-full flex flex-col">
+<div class="min-h-screen w-full flex flex-col bg-[#232b3a] bg-gradient-to-br from-[#232b3a] to-[#1a2233]">
   <div class="w-full max-w-5xl mx-auto px-4 flex flex-col items-center">
-    <!-- Header -->
     <div class="w-full flex flex-col items-center mt-12 mb-14">
       <h1 class="text-5xl font-extrabold text-white tracking-tight drop-shadow-lg px-6 py-2 border-2 border-white rounded-lg mb-2">GooD</h1>
-      <p class="text-lg text-brandmuted font-medium">Get out of Debt</p>
+      <p class="text-lg text-slate-400 font-medium">Get out of Debt</p>
     </div>
-
-    @if (debts.Count > 0)
-    {
-      <div class="w-full mb-12">
-        <ProgressTracker Debts="@debts" />
-      </div>
-    }
-
-    <!-- Summary Cards -->
-    <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-      <div class="bg-white shadow-lg rounded-2xl px-8 py-6 flex flex-col items-start">
-        <span class="text-lg font-bold text-brandmuted mb-2">Total Debt</span>
-        <span class="text-3xl font-extrabold text-brandred">@totalBalance.ToString("C")</span>
-      </div>
-      <div class="bg-white shadow-lg rounded-2xl px-8 py-6 flex flex-col items-start">
-        <span class="text-lg font-bold text-brandmuted mb-2">Monthly Minimum</span>
-        <span class="text-3xl font-extrabold text-brandyellow">@monthlyMinimum.ToString("C")</span>
-      </div>
-      <div class="bg-white shadow-lg rounded-2xl px-8 py-6 flex flex-col items-start">
-        <span class="text-lg font-bold text-brandmuted mb-2">Open Debts</span>
-        <span class="text-3xl font-extrabold text-brandblue5">@openDebts</span>
-      </div>
-    </div>
-
-    @if (debts.Count > 0)
-    {
-      <div class="w-full mb-12">
-        <SuggestedPaymentCard Debts="@debts" TotalMinimumPayment="@monthlyMinimum" />
-      </div>
-      <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-        <PayoffSummary Debts="@debts" ExtraPayment="@extraPayment" OnExtraPaymentChange="@HandleExtraPaymentChange" Strategy="@payoffStrategy" OnStrategyChange="@HandleStrategyChange" />
-        <PayoffChart Debts="@debts" ExtraPayment="@extraPayment" Strategy="@payoffStrategy" />
-      </div>
-    }
-
-    @if (debts.Count == 0)
-    {
-      <div class="flex flex-col items-center justify-center mt-8">
-        <div class="w-20 h-20 bg-brandblue3 rounded-full flex items-center justify-center mb-6 shadow-lg">
-          <!-- Plus Icon -->
-          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    <div class="w-full mb-12">
+      <!-- Debt Paydown Progress -->
+      <div class="bg-[#232b3a] border border-[#2d3650] rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex items-center space-x-2 text-lg font-bold text-white mb-4">
+          <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <span>Debt Paydown Progress</span>
         </div>
-        <h3 class="text-xl font-bold text-white mb-2">No debts yet</h3>
-        <p class="text-base text-brandmuted mb-6">Add your first debt to start tracking your journey to financial freedom</p>
-        <button class="bg-brandblue5 hover:bg-brandblue3 text-white font-bold rounded-lg px-8 py-3 shadow-lg transition" @onclick="() => isAddModalOpen = true">Add Your First Debt</button>
-      </div>
-    }
-    else
-    {
-      <div class="w-full flex justify-center mb-8">
-        <button class="flex items-center gap-2 bg-brandblue5 hover:bg-brandblue3 text-white font-bold rounded-lg px-8 py-3 shadow-lg transition text-lg" @onclick="() => isAddModalOpen = true">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          Add Debt
-        </button>
-      </div>
-      <ul class="w-full space-y-10 mb-20">
-        @foreach (var debt in debts)
-        {
-          <li>
-            <good.Components.Debt.DebtCard Debt="@debt" OnEdit="() => StartEditDebt(debt)" OnDelete="() => StartDeleteDebt(debt)" OnAddPayment="HandleAddPayment" />
-          </li>
-        }
-      </ul>
-      <!-- Optionally, keep a small floating button on mobile only -->
-      <!--
-      <button class="md:hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-brandblue3 hover:bg-brandblue5 hover:scale-105 hover:brightness-110 text-white shadow-2xl flex items-center justify-center z-50 transition-all duration-200" @onclick="() => isAddModalOpen = true">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      </button>
-      -->
-    }
-
-    <AddDebtModal IsOpen="@isAddModalOpen" OnSave="HandleAddDebt" OnCancel="HandleCancelAddDebt" />
-    @if (editingDebt != null)
-    {
-      <AddDebtModal IsOpen="true" OnSave="HandleEditDebt" OnCancel="HandleCancelEditDebt" Debt="@editingDebt" IsEditing="true" />
-    }
-    @if (debtToDelete != null)
-    {
-      <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
-          <h2 class="text-lg font-bold mb-4">Delete Debt</h2>
-          <p class="mb-4">Are you sure you want to delete <b>@debtToDelete.Name</b>?</p>
-          <div class="flex justify-end space-x-2">
-            <button class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300" @onclick="HandleCancelDeleteDebt">Cancel</button>
-            <button class="px-4 py-2 rounded bg-brandred text-white hover:bg-red-700" @onclick="ConfirmDeleteDebt">Delete</button>
+        <div class="text-slate-300 text-sm mb-2">Overall Progress</div>
+        <div class="w-full h-3 bg-[#2d3650] rounded-full overflow-hidden mb-4">
+          <div class="h-3 bg-green-400 rounded-full transition-all duration-300" style="width:@(totalBalance == 0 ? 0 : (100 - (debts.Sum(d => d.Balance) / (debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount))) * 100)).ToString("F0"))%"></div>
+        </div>
+        <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+          <div class="bg-[#193a2f] rounded-xl p-6 flex flex-col items-center shadow">
+            <span class="text-base font-bold text-green-200 mb-2">Paid Off</span>
+            <span class="text-2xl font-extrabold text-green-400">@debts.Sum(d => d.Payments.Sum(p => p.Amount)).ToString("C")</span>
+          </div>
+          <div class="bg-[#3a2b19] rounded-xl p-6 flex flex-col items-center shadow">
+            <span class="text-base font-bold text-orange-200 mb-2">Remaining</span>
+            <span class="text-2xl font-extrabold text-orange-400">@debts.Sum(d => d.Balance).ToString("C")</span>
+          </div>
+          <div class="bg-[#19233a] rounded-xl p-6 flex flex-col items-center shadow">
+            <span class="text-base font-bold text-blue-200 mb-2">Original Total</span>
+            <span class="text-2xl font-extrabold text-blue-400">@(debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount))).ToString("C")</span>
           </div>
         </div>
+        <div class="w-full text-center pt-4 border-t border-[#2d3650]">
+          <p class="text-base text-slate-400 font-bold">🚀 Every payment gets you closer to freedom!</p>
+        </div>
       </div>
-    }
+    </div>
+    <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div class="bg-[#232b3a] border border-[#2d3650] rounded-2xl px-8 py-6 flex flex-col items-start shadow-lg">
+        <span class="text-lg font-bold text-red-300 mb-2">Total Debt</span>
+        <span class="text-3xl font-extrabold text-red-400">@totalBalance.ToString("C")</span>
+      </div>
+      <div class="bg-[#232b3a] border border-[#2d3650] rounded-2xl px-8 py-6 flex flex-col items-start shadow-lg">
+        <span class="text-lg font-bold text-orange-200 mb-2">Monthly Minimum</span>
+        <span class="text-3xl font-extrabold text-orange-400">@monthlyMinimum.ToString("C")</span>
+      </div>
+      <div class="bg-[#232b3a] border border-[#2d3650] rounded-2xl px-8 py-6 flex flex-col items-start shadow-lg">
+        <span class="text-lg font-bold text-blue-200 mb-2">Open Debts</span>
+        <span class="text-3xl font-extrabold text-blue-400">@openDebts</span>
+      </div>
+    </div>
   </div>
-</div> 
+</div>
+
+<div class="w-full mb-12">
+  <SuggestedPaymentCard Debts="@debts" TotalMinimumPayment="@monthlyMinimum" />
+</div>
+<div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+  <PayoffSummary Debts="@debts" ExtraPayment="@extraPayment" OnExtraPaymentChange="@HandleExtraPaymentChange" Strategy="@payoffStrategy" OnStrategyChange="@HandleStrategyChange" />
+  <PayoffChart Debts="@debts" ExtraPayment="@extraPayment" Strategy="@payoffStrategy" />
+</div>
+
+@if (debts.Count == 0)
+{
+  <div class="flex flex-col items-center justify-center mt-8">
+    <div class="w-20 h-20 bg-brandblue3 rounded-full flex items-center justify-center mb-6 shadow-lg">
+      <!-- Plus Icon -->
+      <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </div>
+    <h3 class="text-xl font-bold text-white mb-2">No debts yet</h3>
+    <p class="text-base text-brandmuted mb-6">Add your first debt to start tracking your journey to financial freedom</p>
+    <button class="bg-brandblue5 hover:bg-brandblue3 text-white font-bold rounded-lg px-8 py-3 shadow-lg transition" @onclick="() => isAddModalOpen = true">Add Your First Debt</button>
+  </div>
+}
+else
+{
+  <div class="w-full flex justify-center mb-8">
+    <button class="flex items-center gap-2 bg-brandblue5 hover:bg-brandblue3 text-white font-bold rounded-lg px-8 py-3 shadow-lg transition text-lg" @onclick="() => isAddModalOpen = true">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      Add Debt
+    </button>
+  </div>
+  <ul class="w-full space-y-10 mb-20">
+    @foreach (var debt in debts)
+    {
+      <li>
+        <good.Components.Debt.DebtCard Debt="@debt" OnEdit="() => StartEditDebt(debt)" OnDelete="() => StartDeleteDebt(debt)" OnAddPayment="HandleAddPayment" />
+      </li>
+    }
+  </ul>
+  <!-- Optionally, keep a small floating button on mobile only -->
+  <!--
+  <button class="md:hidden fixed bottom-6 right-6 w-14 h-14 rounded-full bg-brandblue3 hover:bg-brandblue5 hover:scale-105 hover:brightness-110 text-white shadow-2xl flex items-center justify-center z-50 transition-all duration-200" @onclick="() => isAddModalOpen = true">
+    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+  -->
+}
+
+<AddDebtModal IsOpen="@isAddModalOpen" OnSave="HandleAddDebt" OnCancel="HandleCancelAddDebt" />
+@if (editingDebt != null)
+{
+  <AddDebtModal IsOpen="true" OnSave="HandleEditDebt" OnCancel="HandleCancelEditDebt" Debt="@editingDebt" IsEditing="true" />
+}
+@if (debtToDelete != null)
+{
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
+      <h2 class="text-lg font-bold mb-4">Delete Debt</h2>
+      <p class="mb-4">Are you sure you want to delete <b>@debtToDelete.Name</b>?</p>
+      <div class="flex justify-end space-x-2">
+        <button class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300" @onclick="HandleCancelDeleteDebt">Cancel</button>
+        <button class="px-4 py-2 rounded bg-brandred text-white hover:bg-red-700" @onclick="ConfirmDeleteDebt">Delete</button>
+      </div>
+    </div>
+  </div>
+} 
