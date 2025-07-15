@@ -32,10 +32,10 @@
                 <span class="inline-block px-2 py-0.5 rounded text-sm font-semibold border border-slate-300 dark:border-slate-600">@ExtraPayment.ToString("C0")</span>
             </div>
             <div class="text-xs text-slate-500 mb-1">Minimum payment to pay off in 25 years: <span class="font-bold">@BaselinePayment.ToString("C")</span></div>
-            <input type="range" min="0" max="1000" step="25" class="w-full" value="@ExtraPayment" @oninput="OnSliderChanged" aria-label="Extra Monthly Payment Slider" />
+            <input type="range" min="0" max="25000" step="25" class="w-full" value="@ExtraPayment" @oninput="OnSliderChanged" aria-label="Extra Monthly Payment Slider" />
             <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span>$0</span>
-                <span>$1,000</span>
+                <span>$25,000</span>
             </div>
         </div>
         <!-- Results -->
