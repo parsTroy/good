@@ -1,0 +1,95 @@
+@using good.Models
+@using good.Utils
+@using Microsoft.AspNetCore.Components
+@namespace good.Components.Payoff
+
+<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg">
+    <div class="px-6 pt-6 pb-3">
+        <div class="flex items-center space-x-2 text-lg font-bold">
+            <!-- Target Icon -->
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <span>Payoff Strategy</span>
+        </div>
+    </div>
+    <div class="px-6 pb-6 space-y-6">
+        <!-- Strategy Selection -->
+        <div class="space-y-2">
+            <label class="block font-medium">Payoff Method</label>
+            <select class="w-full border rounded px-3 py-2" @bind="Strategy">
+                <option value="avalanche">Debt Avalanche (Highest Interest First)</option>
+                <option value="snowball">Debt Snowball (Lowest Balance First)</option>
+            </select>
+            <p class="text-xs text-slate-600 dark:text-slate-800">
+                @(Strategy == "avalanche"
+                    ? "Pay minimums on all debts, put extra toward highest interest rate"
+                    : "Pay minimums on all debts, put extra toward lowest balance")
+            </p>
+        </div>
+        <!-- Extra Payment Slider -->
+        <div class="space-y-3">
+            <div class="flex justify-between items-center">
+                <label class="block font-medium">Extra Monthly Payment</label>
+                <span class="inline-block px-2 py-0.5 rounded text-sm font-semibold border border-slate-300 dark:border-slate-600">@ExtraPayment.ToString("C0")</span>
+            </div>
+            <div class="text-xs text-slate-500 mb-1">Minimum payment to pay off in 25 years: <span class="font-bold">@BaselinePayment.ToString("C")</span></div>
+            <input type="range" min="0" max="1000" step="25" class="w-full" value="@ExtraPayment" @oninput="OnSliderChanged" aria-label="Extra Monthly Payment Slider" />
+            <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>$0</span>
+                <span>$1,000</span>
+            </div>
+        </div>
+        <!-- Results -->
+        <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-4 shadow-sm" aria-live="polite">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <!-- Calendar Icon -->
+                    <svg class="w-4 h-4 text-slate-600 dark:text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Time to Debt Freedom</span>
+                </div>
+                <span class="font-semibold bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 px-3 py-1 rounded-lg shadow-sm" aria-label="Time to Debt Freedom">@((GetExtraResult().PayoffDate?.ToString("MM/dd/yyyy")) ?? "N/A")</span>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <!-- TrendingUp Icon -->
+                    <svg class="w-4 h-4 text-slate-600 dark:text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Total Interest</span>
+                </div>
+                <span class="font-semibold bg-yellow-50 dark:bg-yellow-900 text-orange-700 dark:text-orange-300 px-3 py-1 rounded-lg shadow-sm" aria-label="Total Interest">@GetExtraResult().TotalInterestWithExtra.ToString("C2")</span>
+            </div>
+            @if (ExtraPayment > 0)
+            {
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Interest Saved</span>
+                    <span class="font-semibold bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 px-3 py-1 rounded-lg shadow-sm" aria-label="Interest Saved">@((GetExtraResult().TotalInterest - GetExtraResult().TotalInterestWithExtra).ToString("C2"))</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Time Saved</span>
+                    <span class="font-semibold bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-lg shadow-sm" aria-label="Time Saved">@FormatTimeSaved(GetExtraResult().TimeSaved)</span>
+                </div>
+            }
+        </div>
+        <!-- Debt Order -->
+        <div class="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <label class="text-sm font-medium">
+                @(Strategy == "avalanche" ? "Pay Order (Highest Interest)" : "Pay Order (Lowest Balance)")
+            </label>
+            <div class="space-y-1">
+                @for (int i = 0; i < GetExtraResult().PayoffOrder.Count; i++)
+                {
+                    var debt = GetExtraResult().PayoffOrder[i];
+                    <div class="flex items-center justify-between text-sm bg-slate-50 dark:bg-slate-300 rounded p-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-block w-6 h-6 p-0 rounded text-xs font-semibold border border-slate-300 dark:border-slate-600 flex items-center justify-center">@(i + 1)</span>
+                            <span class="font-medium">@debt.Name</span>
+                        </div>
+                        <div class="text-slate-600 dark:text-slate-800">
+                            @(Strategy == "avalanche"
+                                ? $"{debt.InterestRate:F1}%"
+                                : debt.Balance.ToString("C0"))
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div> 
