@@ -124,55 +124,55 @@
     }
 }
 
-<div class="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#1e293b] to-[#0f172a]">
+<div class="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#202836] to-[#151a24]">
   <div class="w-full max-w-5xl mx-auto px-4 flex flex-col items-center">
     <div class="w-full flex flex-col items-center mt-12 mb-14">
       <h1 class="text-5xl font-extrabold text-white tracking-tight drop-shadow-lg px-6 py-2 border-2 border-white rounded-lg mb-2">GooD</h1>
-      <p class="text-lg text-slate-400 font-medium">Get out of Debt</p>
+      <p class="text-lg text-slate-300 font-medium">Get out of Debt</p>
     </div>
     <div class="w-full mb-12">
       <!-- Debt Paydown Progress -->
-      <div class="bg-[#232b3a]/80 border border-[#334155] rounded-2xl shadow-xl p-8 mb-8">
+      <div class="bg-[#232b3a] border border-[#3b4252] rounded-2xl shadow-2xl p-8 mb-8">
         <div class="flex items-center space-x-2 text-lg font-bold text-white mb-4">
           <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           <span>Debt Paydown Progress</span>
         </div>
         <div class="flex justify-between items-center mb-2">
-          <span class="text-slate-300 text-sm">Overall Progress</span>
+          <span class="text-slate-400 text-sm">Overall Progress</span>
           <span class="text-green-400 text-sm font-bold">@((debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount))) == 0 ? "0%" : ((debts.Sum(d => d.Payments.Sum(p => p.Amount)) / (debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount)))) * 100).ToString("F0") + "%")</span>
         </div>
-        <div class="w-full h-3 bg-[#334155] rounded-full overflow-hidden mb-6">
+        <div class="w-full h-3 bg-[#2d3344] rounded-full overflow-hidden mb-6">
           <div class="h-3 bg-green-400 rounded-full transition-all duration-300" style="width:@((debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount))) == 0 ? 0 : ((debts.Sum(d => d.Payments.Sum(p => p.Amount)) / (debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount)))) * 100).ToString("F0"))%"></div>
         </div>
         <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
-          <div class="bg-[#1a2e22]/90 rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#334155]">
+          <div class="bg-[#183c2a] rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#2e4d3a]">
             <span class="text-base font-bold text-green-200 mb-2 flex items-center"><svg class="w-4 h-4 mr-1 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>Paid Off</span>
             <span class="text-2xl font-extrabold text-green-400">@debts.Sum(d => d.Payments.Sum(p => p.Amount)).ToString("C")</span>
           </div>
-          <div class="bg-[#33251a]/90 rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#334155]">
+          <div class="bg-[#3c2a18] rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#4d3a2e]">
             <span class="text-base font-bold text-orange-200 mb-2 flex items-center"><svg class="w-4 h-4 mr-1 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Remaining</span>
             <span class="text-2xl font-extrabold text-orange-400">@debts.Sum(d => d.Balance).ToString("C")</span>
           </div>
-          <div class="bg-[#1a2233]/90 rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#334155]">
+          <div class="bg-[#1a223c] rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#2e3a4d]">
             <span class="text-base font-bold text-blue-200 mb-2 flex items-center"><svg class="w-4 h-4 mr-1 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Original Total</span>
             <span class="text-2xl font-extrabold text-blue-400">@(debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount))).ToString("C")</span>
           </div>
         </div>
-        <div class="w-full text-center pt-4 border-t border-[#334155]">
-          <p class="text-base text-slate-400 font-bold">🚀 Every payment gets you closer to freedom!</p>
+        <div class="w-full text-center pt-4 border-t border-[#3b4252]">
+          <p class="text-base text-slate-300 font-bold">🚀 Every payment gets you closer to freedom!</p>
         </div>
       </div>
     </div>
     <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-      <div class="bg-[#232b3a]/80 border border-[#334155] rounded-2xl px-8 py-6 flex flex-col items-start shadow-xl">
+      <div class="bg-[#232b3a] border border-[#3b4252] rounded-2xl px-8 py-6 flex flex-col items-start shadow-xl">
         <span class="text-lg font-bold text-red-300 mb-2">Total Debt</span>
         <span class="text-3xl font-extrabold text-red-400">@totalBalance.ToString("C")</span>
       </div>
-      <div class="bg-[#232b3a]/80 border border-[#334155] rounded-2xl px-8 py-6 flex flex-col items-start shadow-xl">
+      <div class="bg-[#232b3a] border border-[#3b4252] rounded-2xl px-8 py-6 flex flex-col items-start shadow-xl">
         <span class="text-lg font-bold text-orange-200 mb-2">Monthly Minimum</span>
         <span class="text-3xl font-extrabold text-orange-400">@monthlyMinimum.ToString("C")</span>
       </div>
-      <div class="bg-[#232b3a]/80 border border-[#334155] rounded-2xl px-8 py-6 flex flex-col items-start shadow-xl">
+      <div class="bg-[#232b3a] border border-[#3b4252] rounded-2xl px-8 py-6 flex flex-col items-start shadow-xl">
         <span class="text-lg font-bold text-blue-200 mb-2">Open Debts</span>
         <span class="text-3xl font-extrabold text-blue-400">@openDebts</span>
       </div>
