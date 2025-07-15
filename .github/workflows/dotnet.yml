@@ -25,14 +25,14 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Publish
-        run: dotnet publish -c Release -o build
+        run: dotnet publish -c Release -o publish
 
       - name: Copy index.html to 404.html (for client-side routing)
-        run: cp build/wwwroot/index.html build/wwwroot/404.html
+        run: cp publish/wwwroot/index.html publish/wwwroot/404.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/wwwroot
+          publish_dir: ./publish/wwwroot
           publish_branch: gh-pages 
