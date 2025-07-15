@@ -36,3 +36,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./publish/wwwroot
           publish_branch: gh-pages 
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write 
