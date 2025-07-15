@@ -21,9 +21,12 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: good
 
     - name: Build
       run: dotnet build --no-restore --configuration Release
+      working-directory: good
 
     - name: Run tests
       run: dotnet test --no-build --configuration Release --logger trx
+      working-directory: good
