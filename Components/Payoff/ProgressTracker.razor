@@ -1,0 +1,67 @@
+@using good.Models
+@using Microsoft.AspNetCore.Components
+@namespace good.Components.Payoff
+
+@if (Debts.Count > 0)
+{
+    <div class="bg-white shadow-lg rounded-2xl mb-12 px-8 py-8 w-full max-w-3xl mx-auto flex flex-col items-center" aria-label="Debt Paydown Progress">
+        <div class="flex items-center space-x-3 mb-6">
+            <!-- Target Icon -->
+            <svg class="w-7 h-7 text-[#22c55e]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <span class="text-2xl font-extrabold text-[#151e2e]">Debt Paydown Progress</span>
+        </div>
+        <!-- Progress Bar -->
+        <div class="w-full mb-8" aria-live="polite">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-base font-medium text-[#7b8ca6]">Overall Progress</span>
+                <span class="text-base font-bold text-[#22c55e]">@ProgressPercentage%</span>
+            </div>
+            <div class="h-4 bg-[#e5eaf3] rounded-full overflow-hidden">
+                <div class="h-4 bg-[#22c55e] rounded-full transition-all duration-300" style="width:@(ProgressPercentage)%"></div>
+            </div>
+        </div>
+        <!-- Stats Grid -->
+        <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-6" aria-label="Debt Stats">
+            <div class="flex flex-col items-center bg-[#e6f9f0] rounded-xl py-5">
+                <div class="flex items-center mb-1">
+                    <svg class="w-5 h-5 text-[#22c55e] mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                    <span class="text-xs font-bold text-[#7b8ca6]">Paid Off</span>
+                </div>
+                <div class="text-xl font-extrabold text-[#22c55e]">@TotalPaymentsMade.ToString("C")</div>
+            </div>
+            <div class="flex flex-col items-center bg-[#fff7e6] rounded-xl py-5">
+                <div class="flex items-center mb-1">
+                    <svg class="w-5 h-5 text-[#ffb86c] mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span class="text-xs font-bold text-[#7b8ca6]">Remaining</span>
+                </div>
+                <div class="text-xl font-extrabold text-[#ffb86c]">@CurrentTotalBalance.ToString("C")</div>
+            </div>
+            <div class="flex flex-col items-center bg-[#e6f0ff] rounded-xl py-5">
+                <div class="flex items-center mb-1">
+                    <svg class="w-5 h-5 text-[#3b82f6] mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <span class="text-xs font-bold text-[#7b8ca6]">Original Total</span>
+                </div>
+                <div class="text-xl font-extrabold text-[#3b82f6]">@OriginalTotalDebt.ToString("C")</div>
+            </div>
+        </div>
+        <!-- Motivational Message -->
+        <div class="w-full text-center pt-4 border-t border-[#e5eaf3]" aria-live="polite">
+            <p class="text-base text-[#7b8ca6] font-bold">@MotivationalMessage</p>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public List<Debt> Debts { get; set; } = new();
+
+    private decimal TotalPaymentsMade => Debts.Sum(d => d.Payments?.Sum(p => p.Amount) ?? 0);
+    private decimal OriginalTotalDebt => Debts.Sum(d => d.Balance + (d.Payments?.Sum(p => p.Amount) ?? 0));
+    private decimal CurrentTotalBalance => Debts.Sum(d => d.Balance);
+    private int ProgressPercentage => OriginalTotalDebt > 0 ? (int)Math.Round((TotalPaymentsMade / OriginalTotalDebt) * 100) : 0;
+
+    private string MotivationalMessage =>
+        ProgressPercentage >= 75 ? "🎉 Almost there! You're doing amazing!" :
+        ProgressPercentage >= 50 ? "💪 Great progress! Keep it up!" :
+        ProgressPercentage >= 25 ? "📈 You're building momentum!" :
+        "🚀 Every payment gets you closer to freedom!";
+} 
