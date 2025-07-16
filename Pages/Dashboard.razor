@@ -15,6 +15,8 @@
     private int openDebts => debts.Count;
     private decimal extraPayment = 0;
     private string payoffStrategy = "avalanche";
+    private decimal totalPayments => debts.Sum(d => d.Payments?.Sum(p => p.Amount) ?? 0);
+    private decimal originalTotal => debts.Sum(d => d.Balance) + totalPayments;
 
     protected override async Task OnInitializedAsync()
     {
@@ -155,7 +157,7 @@
           </div>
           <div class="bg-[#1a223c] rounded-xl p-6 flex flex-col items-center shadow-lg border border-[#2e3a4d]">
             <span class="text-base font-bold text-blue-200 mb-2 flex items-center"><svg class="w-4 h-4 mr-1 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Original Total</span>
-            <span class="text-2xl font-extrabold text-blue-400">@(debts.Sum(d => d.Balance) + debts.Sum(d => d.Payments.Sum(p => p.Amount))).ToString("C")</span>
+            <span class="text-2xl font-extrabold text-blue-400">@originalTotal.ToString("C")</span>
           </div>
         </div>
         <div class="w-full text-center pt-4 border-t border-[#3b4252]">
