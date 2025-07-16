@@ -3,9 +3,9 @@
 @using Microsoft.AspNetCore.Components.Forms
 @namespace good.Components.Debt
 
-<div class="bg-black/30 border border-[#2e3a4d] rounded-2xl shadow-2xl mb-10 px-8 py-8 w-full max-w-3xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center space-x-4">
+<div class="bg-black/30 border border-[#2e3a4d] rounded-2xl shadow-2xl mb-10 px-8 py-8 w-full">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 w-full">
+        <div class="flex items-center space-x-4 mb-6 md:mb-0">
             <div class="w-12 h-12 bg-[#22336a] rounded-full flex items-center justify-center">
                 <!-- CreditCard Icon -->
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
@@ -17,35 +17,19 @@
                 </span>
             </div>
         </div>
-        <div class="flex space-x-2">
-            <button class="h-8 w-8 flex items-center justify-center text-slate-400 hover:text-blue-400 focus:ring-2 focus:ring-blue-500 focus:outline-none hover:scale-110 transition" @onclick="() => OnEdit.InvokeAsync(Debt)" aria-label="Edit Debt">
-                <!-- Edit Icon -->
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6"/></svg>
-            </button>
-            <button class="h-8 w-8 flex items-center justify-center text-slate-400 hover:text-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none hover:scale-110 transition" @onclick="() => OnDelete.InvokeAsync(Debt)" aria-label="Delete Debt">
-                <!-- Trash Icon -->
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-        <div class="space-y-2">
-            <div class="flex items-center text-slate-400 text-sm font-medium">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Current Balance
+        <div class="flex flex-col md:flex-row md:space-x-12 w-full md:w-auto justify-between">
+            <div class="flex flex-col mb-4 md:mb-0">
+                <span class="text-slate-400 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Current Balance</span>
+                <span class="text-2xl font-extrabold text-red-400">@Debt.Balance.ToString("C")</span>
+                <span class="text-slate-400 text-sm">Minimum Payment</span>
+                <span class="text-base font-bold text-green-400">@Debt.MinimumPayment.ToString("C")</span>
             </div>
-            <div class="text-2xl font-extrabold text-red-400">@Debt.Balance.ToString("C")</div>
-            <div class="text-slate-400 text-sm">Minimum Payment</div>
-            <div class="text-base font-bold text-green-400">@Debt.MinimumPayment.ToString("C")</div>
-        </div>
-        <div class="space-y-2">
-            <div class="flex items-center text-slate-400 text-sm font-medium">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 17L13.5 8.5 8.5 13.5 2 7"/><path d="M16 17h6v-6"/></svg>
-                Interest Rate
+            <div class="flex flex-col">
+                <span class="text-slate-400 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 17L13.5 8.5 8.5 13.5 2 7"/><path d="M16 17h6v-6"/></svg>Interest Rate</span>
+                <span class="text-2xl font-extrabold text-white">@Debt.InterestRate.ToString("F2")%</span>
+                <span class="text-slate-400 text-sm">Total Paid</span>
+                <span class="text-base font-bold text-green-400">@TotalPaid.ToString("C")</span>
             </div>
-            <div class="text-2xl font-extrabold text-white">@Debt.InterestRate.ToString("F2")%</div>
-            <div class="text-slate-400 text-sm">Total Paid</div>
-            <div class="text-base font-bold text-green-400">@TotalPaid.ToString("C")</div>
         </div>
     </div>
     @{
