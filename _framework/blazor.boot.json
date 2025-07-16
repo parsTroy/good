@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "good",
   "resources": {
-    "hash": "sha256-5XybPPQ/5Z+Phz3l1nyX70b8Itsa4AIFg5r5GjaB8eg=",
+    "hash": "sha256-vY4NRCOsD8rMdmKITfIIiAWdkm4/T3PhB5lg6RGgnqs=",
     "jsModuleNative": {
       "dotnet.native.8.0.18.td341apd3g.js": "sha256-1QpKPnxEuRCElzcp+e3MrovJeAJkuzqKmRQay/6Aa08="
     },
@@ -18,7 +18,7 @@
     },
     "assembly": {
       "ApexCharts.Blazor.wasm": "sha256-XFP5JheDk+4jWG178jlW12tJgqmQPUPyOHaBJcY8hdI=",
-      "good.wasm": "sha256-UqKLo+JviyHiNlfICZ/L5ft5WDs1uoK2fwGHP7+B8WY=",
+      "good.wasm": "sha256-3tHAGrys5E8UMAX3fkL5QRa8fwloHEhKH13vAL1taLI=",
       "HarfBuzzSharp.wasm": "sha256-U7UBeYhYtmjxDuIYyxMusd0aXJiGA3jIr14HNFJ0qUo=",
       "LiveChartsCore.SkiaSharpView.Blazor.wasm": "sha256-8XUO6Wf0iabZF5CVd6ikL3BSPbMH/MOAvf65d1kWZLI=",
       "LiveChartsCore.SkiaSharpView.wasm": "sha256-7l31RxLS/VeBp5sVeu7Ppnr2B1i0UUl1hgM5/4/c0zs=",
